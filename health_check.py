@@ -8,7 +8,9 @@ Sends email if there are problems, such as:
     - Report error if the hostname 'localhost' cannot be resolved to
       '127.0.0.1'
 '''
-import shutil, psutil, os, socket, emails
+import shutil, psutil, socket
+import os, sys, time
+import emails
 
 def check_cpu_constrained():
     '''Returns True if the cpu is having too much usage, False otherwise.'''
@@ -53,32 +55,32 @@ def email_error(subject):
     emails.send_email(message)
 
 def main():
-    #TODO: Call functions every 60 seconds
-    checks = [
-            (check_cpu_constrained(),
-                'Error - CPU usage is over 80%'),
-            (check_disk_full(),
-                'Error - Available disk space is less than 20%'),
-            (check_memory_full(),
-                'Error - Available memory is less than 500MB'),
-            (check_no_network(),
-                'Error - localhost cannot be resolved to 127.0.0.1')
-            ]
+    # Call functions every 60 seconds
+    while True:
+        checks = [
+                (check_cpu_constrained,
+                    'Error - CPU usage is over 80%'),
+                (check_disk_full,
+                    'Error - Available disk space is less than 20%'),
+                (check_memory_full,
+                    'Error - Available memory is less than 500MB'),
+                (check_no_network,
+                    'Error - localhost cannot be resolved to 127.0.0.1')
+                ]
 
-    everything_ok = True
+        everything_ok = True
 
-    # Call all functions in list and send email for each issue detected
-    for check, msg in checks:
-        if check():
-            print(msg)
-            email_error(msg)
-            everything_ok = False
+        # Call all functions in list and send email for each issue detected
+        for check, msg in checks:
+            if check():
+                print(msg)
+                email_error(msg)
+                everything_ok = False
 
-    if not everything_ok:
-        sys.exit(1)
+        if everything_ok:
+            print('Everything ok.')
 
-    print('Everything ok.')
-    sys.exit(0)
+        time.sleep(60)  # Wait 60 seconds before running commands again
 
 if __name__ == '__main__':
     main()

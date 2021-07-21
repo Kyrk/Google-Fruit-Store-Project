@@ -1,6 +1,6 @@
 # Google Fruit Store Project
 
-Final project for IT Automation with Python certificate offered by Google.
+Final project for Google's IT Automation with Python certificate.
 This is a system to update the catalog information of an online fruits store
 using data provided by suppliers.
 

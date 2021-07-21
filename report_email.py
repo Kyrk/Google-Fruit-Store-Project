@@ -19,23 +19,28 @@ from datetime import date
 def main():
     # Name of report to generate
     attachment = '/tmp/processed.pdf'
+
     # Get date for title
     today = date.today()
     title = "Processed Update on {}".format(today.strftime("%B %d, %Y"))
+
     # Get files from directory to iterate
-    path = '~/supplier-data/descriptions/'
+    path = 'supplier-data/descriptions/'
     files = os.listdir(path)
     paragraph = ''  # Empty paragraph
+
     # Open files and add fruit name and weight to paragraph
     for file in files:
-        if os.path.splitext(file)[1] == '.txt':
-            with open(path + file) as fp:
-                for i, line in enumerate(fp):
-                    if i == 0:
-                        paragraph += 'Name: {}'.format(line)
-                    elif i == 1:
-                        paragraph += 'Weight: {}'.format(line)
-                paragraph += '\n'
+        if os.path.splitext(file)[1] != '.txt':
+            continue
+
+        with open(path + file) as fp:
+            for i, line in enumerate(fp):
+                if i == 0:
+                    paragraph += 'Name: {}'.format(line)
+                elif i == 1:
+                    paragraph += 'Weight: {}'.format(line)
+            paragraph += '\n'
 
     # Replace newlines with breaks
     paragraph = paragraph.replace('\n', '<br/>')

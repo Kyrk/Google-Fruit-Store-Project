@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-'''Script that emails generated PDF report.'''
+'''Script with functions to generate and send emails with a PDF attachment.'''
 import email.message
 import mimetypes
 import os.path
@@ -16,7 +16,7 @@ def generate_email(sender, recipient, subject, body, attachment_path=''):
 
     # Process the attachment and add it to the email if it exists
     if attachment_path not '':
-        attachment_filename = os.path.basement(attachment_path)
+        attachment_filename = os.path.basename(attachment_path)
         mime_type, _ = mimetypes.guess_type(attachment_path)
         mime_type, mime_subtype = mime_type.split('/', 1)
 
